@@ -1,7 +1,7 @@
 ﻿using Npgsql;
 using System.Data.Common;
 
-namespace ContactApi.Repository.Connection
+namespace ContactService.Repository.Connection
 {
     public class ConnectionFactory : IConnectionFactory
     {

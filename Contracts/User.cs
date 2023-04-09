@@ -1,4 +1,4 @@
-﻿namespace ContactApi.Contracts
+﻿namespace ContactService.Contracts
 {
     public class User
     {

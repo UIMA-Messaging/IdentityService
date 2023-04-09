@@ -1,6 +1,6 @@
-using ContactApi.Contracts;
+using ContactService.Contracts;
 
-namespace ContactApi.Services;
+namespace ContactService.Services;
 
 public interface IUserService
 {

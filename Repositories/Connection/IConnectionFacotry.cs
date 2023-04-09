@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 
-namespace ContactApi.Repository.Connection
+namespace ContactService.Repository.Connection
 {
     public interface IConnectionFactory
     {

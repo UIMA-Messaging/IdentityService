@@ -1,8 +1,8 @@
-﻿using ContactApi.Contracts;
-using ContactApi.Repository.Connection;
+﻿using ContactService.Contracts;
+using ContactService.Repository.Connection;
 using Dapper;
 
-namespace ContactApi.Repository
+namespace ContactService.Repository
 {
     public class KeyRepository
     {

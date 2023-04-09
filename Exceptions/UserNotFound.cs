@@ -1,4 +1,4 @@
-namespace ContactApi.Exceptions;
+namespace ContactService.Exceptions;
 
 public class UserNotFound : HttpException
 {

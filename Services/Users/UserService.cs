@@ -1,8 +1,8 @@
-using ContactApi.Contracts;
-using ContactApi.Exceptions;
-using ContactApi.Repository;
+using ContactService.Contracts;
+using ContactService.Exceptions;
+using ContactService.Repository;
 
-namespace ContactApi.Services;
+namespace ContactService.Services;
 
 public class UserService : IUserService
 {

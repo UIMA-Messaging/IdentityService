@@ -1,7 +1,7 @@
-using ContactApi.Contracts;
-using ContactApi.Exceptions;
-using ContactApi.Repository;
-using ContactApi.Services;
+using ContactService.Contracts;
+using ContactService.Exceptions;
+using ContactService.Repository;
+using ContactService.Services;
 
 namespace ContactService.Services.Keys;
 

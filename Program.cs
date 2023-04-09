@@ -1,8 +1,8 @@
 ﻿using Bugsnag;
-using ContactApi.Exceptions;
-using ContactApi.Repository;
-using ContactApi.Repository.Connection;
-using ContactApi.Services;
+using ContactService.Exceptions;
+using ContactService.Repository;
+using ContactService.Repository.Connection;
+using ContactService.Services;
 using ContactService.Services.Keys;
 
 var builder = WebApplication.CreateBuilder(args);

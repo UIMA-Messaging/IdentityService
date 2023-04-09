@@ -1,4 +1,4 @@
-using ContactApi.Contracts;
+using ContactService.Contracts;
 
 namespace ContactService.Services.Keys;
 
