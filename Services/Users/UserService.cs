@@ -10,7 +10,7 @@ public class UserService : IUserService
 
     public UserService(UserRepository repository)
     {
-        this.repository = repository ?? throw new ArgumentNullException(nameof(UserRepository));
+        this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
     public async Task<User> GetUserById(string userId)

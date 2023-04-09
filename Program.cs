@@ -3,6 +3,7 @@ using ContactApi.Exceptions;
 using ContactApi.Repository;
 using ContactApi.Repository.Connection;
 using ContactApi.Services;
+using ContactService.Services.Keys;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +16,11 @@ builder.Services.AddSingleton<IClient>(_ => new Client(builder.Configuration["Bu
 
 // Repositories
 builder.Services.AddSingleton(_ => new UserRepository(new ConnectionFactory(builder.Configuration["ConnectionStrings:Users"])));
+builder.Services.AddSingleton(_ => new KeyRepository(new ConnectionFactory(builder.Configuration["ConnectionStrings:Keys"])));
 
 // Services
-builder.Services.AddSingleton<IUserService>(i => new UserService(i.GetRequiredService<UserRepository>()));
+builder.Services.AddTransient<IUserService>(s => new UserService(s.GetRequiredService<UserRepository>()));
+builder.Services.AddTransient<IKeyService>(s => new KeyService(s.GetRequiredService<KeyRepository>(), s.GetRequiredService<IUserService>()));
 
 var app = builder.Build();
 

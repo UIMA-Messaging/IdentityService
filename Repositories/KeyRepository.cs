@@ -13,7 +13,7 @@ namespace ContactApi.Repository
             this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
-        public async Task<KeyBundle> GetKeyBundleAndDisposeByUserId(string userId)
+        public async Task<KeyBundle> GetKeyBundleAndDisposeFromUser(string userId)
         {
             using var connection = factory.GetOpenConnection();
             const string sql = @"
@@ -22,6 +22,26 @@ namespace ContactApi.Repository
                 WHERE Id = @Id
                 LIMIT 1";
             return await connection.QueryFirstAsync<KeyBundle>(sql, new { Id = userId });
+        }
+
+        public async Task CreateOrUpdateIdentityKey(string userId, string key)
+        {
+            
+        }
+
+        public async Task CreateOneTimePreKeys(string userId, string[] keys)
+        {
+            
+        }
+
+        public async Task CreateOrUpdateSignedPreKey(string userId, string key)
+        {
+            
+        }
+
+        public async Task CreateOrUpdateSignature(string userId, string signature)
+        {
+            
         }
     }
 }

@@ -8,11 +8,11 @@ namespace ContactApi.Controllers;
 [Route("users")]
 public class UserController : ControllerBase
 {
-    private IUserService service;
+    private readonly IUserService service;
 
     public UserController(IUserService service)
     {
-        this.service = service;
+        this.service = service ?? throw new ArgumentNullException(nameof(service));
     }
     
     [HttpGet("{userId}")]

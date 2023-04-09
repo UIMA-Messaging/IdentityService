@@ -1,5 +1,6 @@
 using ContactApi.Contracts;
 using ContactApi.Exceptions;
+using ContactService.Services.Keys;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContactApi.Controllers;
@@ -8,20 +9,22 @@ namespace ContactApi.Controllers;
 [Route("keys")]
 public class KeyController : ControllerBase
 {
-    [HttpPost("bundle/{from}/{to}")]
-    public IActionResult FetchKeyBundle(string from, string to)
-    {
-        if (from == to)
-        {
-            throw new BadKeyBundleRequest();
-        }
-        
-        return Ok();
-    }
+    private readonly IKeyService service;
 
-    [HttpPost("register/exchanges")]
-    public IActionResult RegisterKeyBundles([FromBody] ExchangeKeys keys)
+    public KeyController(IKeyService service)
     {
-        return Ok();
+        this.service = service ?? throw new ArgumentNullException(nameof(service));
+    }
+    
+    [HttpPost("register/exchanges")]
+    public async Task RegisterKeyBundles([FromBody] ExchangeKeys keys)
+    {
+        await service.RegisterExchangeKeys(keys);
+    }
+    
+    [HttpPost("bundle/{from}/{to}")]
+    public async Task<KeyBundle> FetchKeyBundle(string from, string to)
+    {
+        return await service.GetKeyBundle(from, to);
     }
 }
