@@ -15,14 +15,23 @@ namespace ContactApi.Repository
 
         public async Task<User> GetUserById(string userId)
         {
-            using var connection = factory.GetOpenConnection();
-            const string sql = @"
-                SELECT *
-                FROM Users
-                WHERE Id = @Id
-                LIMIT 1";
+            await using var connection = factory.GetOpenConnection();
+            const string sql = @"SELECT * FROM Users WHERE Id = @Id LIMIT 1";
             return await connection.QueryFirstAsync<User>(sql, new { Id = userId });
+        }
+
+        public async Task<User> GetUserByUsername(string username)
+        {
+            await using var connection = factory.GetOpenConnection();
+            const string sql = @"SELECT * FROM Users WHERE Username = @Username LIMIT 1";
+            return await connection.QueryFirstAsync<User>(sql, new { Username = username });
+        }
+
+        public async Task<User> GetUserByDisplayName(string displayName)
+        {
+            await using var connection = factory.GetOpenConnection();
+            const string sql = @"SELECT * FROM Users WHERE DisplayName = @DisplayName LIMIT 1";
+            return await connection.QueryFirstAsync<User>(sql, new { DisplayName = displayName });        
         }
     }
 }
-

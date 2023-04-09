@@ -17,4 +17,14 @@ public class UserService : IUserService
     {
         return await repository.GetUserById(userId) ?? throw new UserNotFound();
     }
+
+    public async Task<User> GetUserByUsername(string username)
+    {
+        return await repository.GetUserByUsername(username) ?? throw new UserNotFound();
+    }
+
+    public async Task<User> GetUserByDisplayName(string displayName)
+    {
+        return await repository.GetUserByDisplayName(displayName) ?? throw new UserNotFound();
+    }
 }

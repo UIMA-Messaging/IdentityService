@@ -4,5 +4,7 @@ namespace ContactApi.Services;
 
 public interface IUserService
 {
-    public Task<User> GetUserById(string userId);
+    Task<User> GetUserById(string userId);
+    Task<User> GetUserByUsername(string username);
+    Task<User> GetUserByDisplayName(string displayName);
 }
