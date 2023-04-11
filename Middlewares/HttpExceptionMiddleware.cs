@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using Bugsnag;
 
-namespace ContactService.Exceptions
+namespace IdentityService.Exceptions
 {
     internal class HttpExceptionMiddleware
     {

@@ -1,8 +1,8 @@
-﻿using ContactService.Contracts;
-using ContactService.Repository.Connection;
+﻿using IdentityService.Contracts;
+using IdentityService.Repository.Connection;
 using Dapper;
 
-namespace ContactService.Repository
+namespace IdentityService.Repository
 {
     public class UserRepository
     {

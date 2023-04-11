@@ -1,6 +1,6 @@
-using ContactService.Contracts;
+using IdentityService.Contracts;
 
-namespace ContactService.Services.Keys;
+namespace IdentityService.Services.Keys;
 
 public interface IKeyService
 {

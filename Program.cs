@@ -1,9 +1,9 @@
 ﻿using Bugsnag;
-using ContactService.Exceptions;
-using ContactService.Repository;
-using ContactService.Repository.Connection;
-using ContactService.Services;
-using ContactService.Services.Keys;
+using IdentityService.Exceptions;
+using IdentityService.Repository;
+using IdentityService.Repository.Connection;
+using IdentityService.Services;
+using IdentityService.Services.Keys;
 
 var builder = WebApplication.CreateBuilder(args);
 

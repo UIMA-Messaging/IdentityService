@@ -1,8 +1,8 @@
-﻿using ContactService.Contracts;
-using ContactService.Services;
+﻿using IdentityService.Contracts;
+using IdentityService.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ContactService.Controllers;
+namespace IdentityService.Controllers;
 
 [ApiController]
 [Route("users")]

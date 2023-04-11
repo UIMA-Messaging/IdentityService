@@ -1,9 +1,9 @@
-using ContactService.Contracts;
-using ContactService.Exceptions;
-using ContactService.Repository;
-using ContactService.Services;
+using IdentityService.Contracts;
+using IdentityService.Exceptions;
+using IdentityService.Repository;
+using IdentityService.Services;
 
-namespace ContactService.Services.Keys;
+namespace IdentityService.Services.Keys;
 
 public class KeyService : IKeyService
 {

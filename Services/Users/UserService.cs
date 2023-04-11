@@ -1,8 +1,8 @@
-using ContactService.Contracts;
-using ContactService.Exceptions;
-using ContactService.Repository;
+using IdentityService.Contracts;
+using IdentityService.Exceptions;
+using IdentityService.Repository;
 
-namespace ContactService.Services;
+namespace IdentityService.Services;
 
 public class UserService : IUserService
 {

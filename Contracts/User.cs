@@ -1,4 +1,4 @@
-﻿namespace ContactService.Contracts
+﻿namespace IdentityService.Contracts
 {
     public class User
     {

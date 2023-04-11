@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ContactService.Contracts
+namespace IdentityService.Contracts
 {
     public class ExchangeKeys
     {

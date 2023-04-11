@@ -1,9 +1,9 @@
-using ContactService.Exceptions;
-using ContactService.Contracts;
-using ContactService.Services.Keys;
+using IdentityService.Exceptions;
+using IdentityService.Contracts;
+using IdentityService.Services.Keys;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ContactService.Controllers;
+namespace IdentityService.Controllers;
 
 [ApiController]
 [Route("keys")]
