@@ -1,4 +1,3 @@
-using IdentityService.Exceptions;
 using IdentityService.Contracts;
 using IdentityService.Services.Keys;
 using Microsoft.AspNetCore.Mvc;

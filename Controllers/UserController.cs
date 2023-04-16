@@ -1,4 +1,5 @@
-﻿using IdentityService.Contracts;
+﻿using ContactService.Contracts;
+using IdentityService.Contracts;
 using IdentityService.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,13 +23,24 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("username/{username}")]
-    public async Task<User[]> GetUserByUsername(string username, [FromQuery] int count = 10, [FromQuery] int offset = 0)
+    public async Task<PaginatedResults> GetUserByUsername(string username, [FromQuery] int count = 10, [FromQuery] int offset = 0)
     {
-        return await service.GetUserByUsername(username, count, offset);
+        var results = await service.GetUserByUsername(username, count, offset);
+
+        string protocol = HttpContext.Request.IsHttps ? "https" : "http";
+        string host = HttpContext.Request.Host.Value;
+        string baseUrl = $@"{protocol}://{host}/users/username/{username}";
+
+        return new PaginatedResults
+        {
+            NextPage = results.Length < count ? null : @$"{baseUrl}?count={count}&offset={offset + count}",
+            PreviousPage = offset - count < 0 ? null : @$"{baseUrl}?count={count}&offset={offset - count}",
+            Results = results,
+        };
     }
     
     [HttpGet("displayName/{displayName}")]
-    public async Task<User[]> GetUserByDisplayName(string displayName, [FromQuery] int count = 10, [FromQuery] int offset = 0)
+    public async Task<PaginatedResults> GetUserByDisplayName(string displayName, [FromQuery] int count = 10, [FromQuery] int offset = 0)
     {
         return await service.GetUserByDisplayName(displayName, count, offset);
     }
