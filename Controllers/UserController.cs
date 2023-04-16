@@ -42,6 +42,17 @@ public class UserController : ControllerBase
     [HttpGet("displayName/{displayName}")]
     public async Task<PaginatedResults> GetUserByDisplayName(string displayName, [FromQuery] int count = 10, [FromQuery] int offset = 0)
     {
-        return await service.GetUserByDisplayName(displayName, count, offset);
+        var results = await service.GetUserByDisplayName(displayName, count, offset);
+
+        string protocol = HttpContext.Request.IsHttps ? "https" : "http";
+        string host = HttpContext.Request.Host.Value;
+        string baseUrl = $@"{protocol}://{host}/users/displayName/{displayName}";
+
+        return new PaginatedResults
+        {
+            NextPage = results.Length < count ? null : @$"{baseUrl}?count={count}&offset={offset + count}",
+            PreviousPage = offset - count < 0 ? null : @$"{baseUrl}?count={count}&offset={offset - count}",
+            Results = results,
+        };
     }
 }
