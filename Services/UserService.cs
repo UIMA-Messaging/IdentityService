@@ -18,15 +18,9 @@ public class UserService
         return await repository.GetUserById(userId) ?? throw new UserNotFound();
     }
 
-    public async Task<User[]> GetUserByUsername(string username, int count, int offset)
+    public async Task<User[]> GetUsersByQuery(string query, int count, int offset)
     {
-        var users = await repository.GetUserByUsername(username, count, offset);
-        return users.ToArray();
-    }
-
-    public async Task<User[]> GetUserByDisplayName(string displayName, int count, int offset)
-    {
-        var users = await repository.GetUserByDisplayName(displayName, count, offset) ?? throw new UserNotFound();
+        var users = await repository.GetUsersByQuery(query, count, offset);
         return users.ToArray();
     }
 }

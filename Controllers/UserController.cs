@@ -22,31 +22,14 @@ public class UserController : ControllerBase
         return await service.GetUserById(userId);
     }
 
-    [HttpGet("username/{username}")]
-    public async Task<PaginatedResults> GetUserByUsername(string username, [FromQuery] int count = 10, [FromQuery] int offset = 0)
+    [HttpGet("search/{query}")]
+    public async Task<PaginatedResults> GetUserByUsername(string query, [FromQuery] int count = 10, [FromQuery] int offset = 0)
     {
-        var results = await service.GetUserByUsername(username, count, offset);
+        var results = await service.GetUsersByQuery(query, count, offset);
 
         string protocol = HttpContext.Request.IsHttps ? "https" : "http";
         string host = HttpContext.Request.Host.Value;
-        string baseUrl = $@"{protocol}://{host}/users/username/{username}";
-
-        return new PaginatedResults
-        {
-            NextPage = results.Length < count ? null : @$"{baseUrl}?count={count}&offset={offset + count}",
-            PreviousPage = offset - count < 0 ? null : @$"{baseUrl}?count={count}&offset={offset - count}",
-            Results = results,
-        };
-    }
-    
-    [HttpGet("displayName/{displayName}")]
-    public async Task<PaginatedResults> GetUserByDisplayName(string displayName, [FromQuery] int count = 10, [FromQuery] int offset = 0)
-    {
-        var results = await service.GetUserByDisplayName(displayName, count, offset);
-
-        string protocol = HttpContext.Request.IsHttps ? "https" : "http";
-        string host = HttpContext.Request.Host.Value;
-        string baseUrl = $@"{protocol}://{host}/users/displayName/{displayName}";
+        string baseUrl = $@"{protocol}://{host}/users/search/{query}";
 
         return new PaginatedResults
         {

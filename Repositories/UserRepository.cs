@@ -20,18 +20,19 @@ namespace IdentityService.Repository
             return await connection.QueryFirstAsync<User>(sql, new { Id = userId });
         }
 
-        public async Task<IEnumerable<User>> GetUserByUsername(string username, int count, int offset)
+        public async Task<IEnumerable<User>> GetUsersByQuery(string query, int count, int offset)
         {
             await using var connection = factory.GetOpenConnection();
-            const string sql = @"SELECT * FROM Users WHERE Username = @Username LIMIT @Count OFFSET @Offset";
-            return await connection.QueryAsync<User>(sql, new { Username = username, Count = count, Offset = offset });
-        }
-
-        public async Task<IEnumerable<User>> GetUserByDisplayName(string displayName, int count, int offset)
-        {
-            await using var connection = factory.GetOpenConnection();
-            const string sql = @"SELECT * FROM Users WHERE DisplayName = @DisplayName LIMIT @Count OFFSET @Offset";
-            return await connection.QueryAsync<User>(sql, new { DisplayName = displayName, Count = count, Offset = offset });        
+            // following query needs `CREATE EXTENSION pg_trgm;` enabled
+            const string sql = @"
+                SELECT * 
+                FROM Users
+                WHERE SIMILARITY(Username, @Query) > 0.3
+                    OR SIMILARITY(DisplayName, @Query) > 0.3 
+                --ORDER BY SIMILARITY(DisplayName, @Query) 
+                --  AND SIMILARITY(Username, @Query) DESC
+                LIMIT @Count OFFSET @Offset"; 
+            return await connection.QueryAsync<User>(sql, new { Query = query, Count = count, Offset = offset });
         }
     }
 }
