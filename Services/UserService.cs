@@ -4,7 +4,7 @@ using IdentityService.Repository;
 
 namespace IdentityService.Services;
 
-public class UserService : IUserService
+public class UserService
 {
     private readonly UserRepository repository;
 

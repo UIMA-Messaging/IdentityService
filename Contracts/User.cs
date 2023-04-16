@@ -1,7 +1,10 @@
-﻿namespace IdentityService.Contracts
+﻿using System.Text.Json.Serialization;
+
+namespace IdentityService.Contracts
 {
     public class User
     {
+        [JsonIgnore]
         public string Id { get; set; }
         public string DisplayName { get; set; }
         public string Username { get; set; }
