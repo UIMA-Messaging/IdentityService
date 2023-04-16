@@ -18,13 +18,15 @@ public class UserService
         return await repository.GetUserById(userId) ?? throw new UserNotFound();
     }
 
-    public async Task<User> GetUserByUsername(string username)
+    public async Task<User[]> GetUserByUsername(string username, int count, int offset)
     {
-        return await repository.GetUserByUsername(username) ?? throw new UserNotFound();
+        var users = await repository.GetUserByUsername(username, count, offset);
+        return users.ToArray();
     }
 
-    public async Task<User> GetUserByDisplayName(string displayName)
+    public async Task<User[]> GetUserByDisplayName(string displayName, int count, int offset)
     {
-        return await repository.GetUserByDisplayName(displayName) ?? throw new UserNotFound();
+        var users = await repository.GetUserByDisplayName(displayName, count, offset) ?? throw new UserNotFound();
+        return users.ToArray();
     }
 }

@@ -8,9 +8,9 @@ namespace IdentityService.Controllers;
 [Route("users")]
 public class UserController : ControllerBase
 {
-    private readonly IUserService service;
+    private readonly UserService service;
 
-    public UserController(IUserService service)
+    public UserController(UserService service)
     {
         this.service = service ?? throw new ArgumentNullException(nameof(service));
     }
@@ -22,14 +22,14 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("username/{username}")]
-    public async Task<User> GetUserByUsername(string username)
+    public async Task<User[]> GetUserByUsername(string username, [FromQuery] int count = 10, [FromQuery] int offset = 0)
     {
-        return await service.GetUserByUsername(username);
+        return await service.GetUserByUsername(username, count, offset);
     }
     
     [HttpGet("displayName/{displayName}")]
-    public async Task<User> GetUserByDisplayName(string displayName)
+    public async Task<User[]> GetUserByDisplayName(string displayName, [FromQuery] int count = 10, [FromQuery] int offset = 0)
     {
-        return await service.GetUserByDisplayName(displayName);
+        return await service.GetUserByDisplayName(displayName, count, offset);
     }
 }

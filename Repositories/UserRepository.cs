@@ -20,18 +20,18 @@ namespace IdentityService.Repository
             return await connection.QueryFirstAsync<User>(sql, new { Id = userId });
         }
 
-        public async Task<User> GetUserByUsername(string username)
+        public async Task<IEnumerable<User>> GetUserByUsername(string username, int count, int offset)
         {
             await using var connection = factory.GetOpenConnection();
-            const string sql = @"SELECT * FROM Users WHERE Username = @Username LIMIT 1";
-            return await connection.QueryFirstAsync<User>(sql, new { Username = username });
+            const string sql = @"SELECT * FROM Users WHERE Username = @Username LIMIT @Count OFFSET @Offset";
+            return await connection.QueryAsync<User>(sql, new { Username = username, Count = count, Offset = offset });
         }
 
-        public async Task<User> GetUserByDisplayName(string displayName)
+        public async Task<IEnumerable<User>> GetUserByDisplayName(string displayName, int count, int offset)
         {
             await using var connection = factory.GetOpenConnection();
-            const string sql = @"SELECT * FROM Users WHERE DisplayName = @DisplayName LIMIT 1";
-            return await connection.QueryFirstAsync<User>(sql, new { DisplayName = displayName });        
+            const string sql = @"SELECT * FROM Users WHERE DisplayName = @DisplayName LIMIT @Count OFFSET @Offset";
+            return await connection.QueryAsync<User>(sql, new { DisplayName = displayName, Count = count, Offset = offset });        
         }
     }
 }
