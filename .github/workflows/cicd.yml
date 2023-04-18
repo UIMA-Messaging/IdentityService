@@ -85,6 +85,8 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
   re-run-task:
+    needs: ecr
+    
     runs-on: ubuntu-latest
 
     steps:
