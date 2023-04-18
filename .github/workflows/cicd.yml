@@ -85,15 +85,12 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
   re-run-task:
-    needs: ecr
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
 
     - name: Configure AWS credentials
-      if: steps.wait-for-ci.outputs.status == 'success'
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-region: ${{ env.AWS_REGION }}
@@ -101,7 +98,6 @@ jobs:
         aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
 
     - name: Stop the running task
-      if: steps.wait-for-ci.outputs.status == 'success'
       run: |
         TASK_ARN=$(aws ecs list-tasks --cluster $ECS_CLUSTER_NAME --service-name $ECS_SERVICE_NAME --desired-status RUNNING --query 'taskArns[0]' --output text)
         if [ ! -z "$TASK_ARN" ]; then
@@ -109,6 +105,6 @@ jobs:
         fi
 
     - name: Run the updated task
-      if: steps.wait-for-ci.outputs.status == 'success'
       run: |
         aws ecs update-service --cluster $ECS_CLUSTER_NAME --service $ECS_SERVICE_NAME --force-new-deployment --task-definition $ECS_TASK_DEFINITION_NAME:1
+        
