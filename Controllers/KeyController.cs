@@ -1,4 +1,3 @@
-using IdentityService.Exceptions;
 using IdentityService.Contracts;
 using IdentityService.Services.Keys;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +8,9 @@ namespace IdentityService.Controllers;
 [Route("keys")]
 public class KeyController : ControllerBase
 {
-    private readonly IKeyService service;
+    private readonly KeyService service;
 
-    public KeyController(IKeyService service)
+    public KeyController(KeyService service)
     {
         this.service = service ?? throw new ArgumentNullException(nameof(service));
     }

@@ -4,7 +4,7 @@ using IdentityService.Repository;
 
 namespace IdentityService.Services;
 
-public class UserService : IUserService
+public class UserService
 {
     private readonly UserRepository repository;
 
@@ -18,13 +18,9 @@ public class UserService : IUserService
         return await repository.GetUserById(userId) ?? throw new UserNotFound();
     }
 
-    public async Task<User> GetUserByUsername(string username)
+    public async Task<User[]> GetUsersByQuery(string query, int count, int offset)
     {
-        return await repository.GetUserByUsername(username) ?? throw new UserNotFound();
-    }
-
-    public async Task<User> GetUserByDisplayName(string displayName)
-    {
-        return await repository.GetUserByDisplayName(displayName) ?? throw new UserNotFound();
+        var users = await repository.GetUsersByQuery(query, count, offset);
+        return users.ToArray();
     }
 }

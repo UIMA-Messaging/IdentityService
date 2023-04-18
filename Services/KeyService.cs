@@ -5,15 +5,15 @@ using IdentityService.Services;
 
 namespace IdentityService.Services.Keys;
 
-public class KeyService : IKeyService
+public class KeyService
 {
     private readonly KeyRepository repository;
     private readonly UserService service;
     
-    public KeyService(KeyRepository repository, IUserService service)
+    public KeyService(KeyRepository repository, UserService service)
     {
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        this.service = this.service ?? throw new ArgumentNullException(nameof(service));
+        this.service = service ?? throw new ArgumentNullException(nameof(service));
     }
 
     public async Task<KeyBundle> GetKeyBundle(string from, string to)

@@ -1,4 +1,5 @@
-﻿using IdentityService.Contracts;
+﻿using ContactService.Contracts;
+using IdentityService.Contracts;
 using IdentityService.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +9,9 @@ namespace IdentityService.Controllers;
 [Route("users")]
 public class UserController : ControllerBase
 {
-    private readonly IUserService service;
+    private readonly UserService service;
 
-    public UserController(IUserService service)
+    public UserController(UserService service)
     {
         this.service = service ?? throw new ArgumentNullException(nameof(service));
     }
@@ -21,15 +22,20 @@ public class UserController : ControllerBase
         return await service.GetUserById(userId);
     }
 
-    [HttpGet("username/{username}")]
-    public async Task<User> GetUserByUsername(string username)
+    [HttpGet("search/{query}")]
+    public async Task<PaginatedResults> GetUserByUsername(string query, [FromQuery] int count = 10, [FromQuery] int offset = 0)
     {
-        return await service.GetUserByUsername(username);
-    }
-    
-    [HttpGet("displayName/{displayName}")]
-    public async Task<User> GetUserByDisplayName(string displayName)
-    {
-        return await service.GetUserByDisplayName(displayName);
+        var results = await service.GetUsersByQuery(query, count, offset);
+
+        string protocol = HttpContext.Request.IsHttps ? "https" : "http";
+        string host = HttpContext.Request.Host.Value;
+        string baseUrl = $@"{protocol}://{host}/users/search/{query}";
+
+        return new PaginatedResults
+        {
+            NextPage = results.Length < count ? null : @$"{baseUrl}?count={count}&offset={offset + count}",
+            PreviousPage = offset - count < 0 ? null : @$"{baseUrl}?count={count}&offset={offset - count}",
+            Results = results,
+        };
     }
 }
