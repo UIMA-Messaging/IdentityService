@@ -10,7 +10,7 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: eu-west-2
   ECS_CLUSTER_NAME: uima
-  ECS_SERVICE_NAME: identity-service
+  ECS_SERVICE_NAME: IdentityService
   ECS_TASK_DEFINITION_NAME: uima-identity-service-deploy
   ECR_REPOSITORY_NAME: uima/identity-service
   ECR_IMAGE_TAG: latest
