@@ -15,7 +15,6 @@ env:
   ECR_REPOSITORY_NAME: uima/identity-service
   ECR_IMAGE_TAG: latest
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  WAIT_FOR_WORKFLOW: ci.yml
 
 jobs:
   build:
@@ -92,14 +91,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: Wait for CI workflow to complete
-      id: wait-for-ci
-      uses: pullreminders/wait-action@v1.6.0
-      with:
-        github_token: ${{ env.GITHUB_TOKEN }}
-        workflow_file: ${{ env.WAIT_FOR_WORKFLOW }}
-        wait_seconds: 5
 
     - name: Configure AWS credentials
       if: steps.wait-for-ci.outputs.status == 'success'
