@@ -26,11 +26,11 @@ jobs:
 
     - name: Wait for CI workflow to complete
       id: wait-for-ci
-      uses: technote-space/wait-action@v0.2.2
+      uses: pullreminders/wait-action@v1.6.0
       with:
-        token: ${{ env.GITHUB_TOKEN }}
-        workflow: ${{ env.WAIT_FOR_WORKFLOW }}
-        ref: ${{ github.ref }}
+        github_token: ${{ env.GITHUB_TOKEN }}
+        workflow_file: ${{ env.WAIT_FOR_WORKFLOW }}
+        wait_seconds: 5
 
     - name: Configure AWS credentials
       if: steps.wait-for-ci.outputs.status == 'success'
