@@ -16,8 +16,9 @@ namespace IdentityService.Repository
         public async Task<User> GetUserById(string userId)
         {
             await using var connection = factory.GetOpenConnection();
-            const string sql = @"SELECT * FROM Users WHERE Id = @Id LIMIT 1";
-            return await connection.QueryFirstAsync<User>(sql, new { Id = userId });
+            const string sql = @"SELECT * FROM ""Users"" WHERE Username = @Username LIMIT 1";
+            var results = await connection.QueryAsync<User>(sql, new { Username = userId });
+            return results.FirstOrDefault();
         }
 
         public async Task<IEnumerable<User>> GetUsersByQuery(string query, int count, int offset)
@@ -25,12 +26,12 @@ namespace IdentityService.Repository
             await using var connection = factory.GetOpenConnection();
             // following query needs `CREATE EXTENSION pg_trgm;` enabled
             const string sql = @"
-                SELECT * 
-                FROM Users
-                WHERE SIMILARITY(Username, @Query) > 0.3
-                    OR SIMILARITY(DisplayName, @Query) > 0.3 
-                --ORDER BY SIMILARITY(DisplayName, @Query) 
-                --  AND SIMILARITY(Username, @Query) DESC
+                SELECT *
+                FROM ""Users""
+                WHERE SIMILARITY(Username, @Query) > 0.2
+	                OR SIMILARITY(DisplayName, @Query) > 0.2 
+                ORDER BY (SIMILARITY(DisplayName, @Query), 
+                    SIMILARITY(Username, @Query)) DESC
                 LIMIT @Count OFFSET @Offset"; 
             return await connection.QueryAsync<User>(sql, new { Query = query, Count = count, Offset = offset });
         }

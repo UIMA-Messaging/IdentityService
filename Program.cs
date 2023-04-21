@@ -1,9 +1,9 @@
-﻿using Bugsnag;
-using IdentityService.Exceptions;
+﻿using IdentityService.Exceptions;
 using IdentityService.Repository;
 using IdentityService.Repository.Connection;
 using IdentityService.Services;
 using IdentityService.Services.Keys;
+using Bugsnag;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,13 +24,11 @@ builder.Services.AddTransient(s => new KeyService(s.GetRequiredService<KeyReposi
 
 var app = builder.Build();
 
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
-app.UseSwagger();
-app.UseSwaggerUI();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 app.UseMiddleware<HttpExceptionMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthorization();

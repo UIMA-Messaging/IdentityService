@@ -1,7 +1,6 @@
 using IdentityService.Contracts;
 using IdentityService.Exceptions;
 using IdentityService.Repository;
-using IdentityService.Services;
 
 namespace IdentityService.Services.Keys;
 
@@ -28,9 +27,6 @@ public class KeyService
     public async Task RegisterExchangeKeys(ExchangeKeys keys)
     {
         var _ = await service.GetUserById(keys.UserId) ?? throw new UserNotFound();
-        await repository.CreateOrUpdateIdentityKey(keys.UserId, keys.IdentityKey);
-        await repository.CreateOrUpdateSignedPreKey(keys.UserId, keys.SignedPreKey);
-        await repository.CreateOrUpdateSignature(keys.UserId, keys.Signature);
-        await repository.CreateOneTimePreKeys(keys.UserId, keys.OneTimePreKeys);
+        await repository.CreateOrUpdateKeys(keys.UserId, keys.IdentityKey, keys.SignedPreKey, keys.Signature, keys.OneTimePreKeys);
     }
 }
