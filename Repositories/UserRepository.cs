@@ -13,11 +13,19 @@ namespace IdentityService.Repository
             this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
-        public async Task<User> GetUserById(string userId)
+        public async Task<User> GetUserByUsername(string username)
         {
             await using var connection = factory.GetOpenConnection();
             const string sql = @"SELECT * FROM ""Users"" WHERE Username = @Username LIMIT 1";
-            var results = await connection.QueryAsync<User>(sql, new { Username = userId });
+            var results = await connection.QueryAsync<User>(sql, new { Username = username });
+            return results.FirstOrDefault();
+        }
+
+        public async Task<User> GetUserById(string userId)
+        {
+            await using var connection = factory.GetOpenConnection();
+            const string sql = @"SELECT * FROM ""Users"" WHERE Id = @Id LIMIT 1";
+            var results = await connection.QueryAsync<User>(sql, new { Id = userId });
             return results.FirstOrDefault();
         }
 

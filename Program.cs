@@ -20,7 +20,7 @@ builder.Services.AddSingleton(_ => new KeyRepository(new ConnectionFactory(build
 
 // Services
 builder.Services.AddTransient(s => new UserService(s.GetRequiredService<UserRepository>()));
-builder.Services.AddTransient(s => new KeyService(s.GetRequiredService<KeyRepository>(), s.GetRequiredService<UserService>()));
+builder.Services.AddTransient(s => new KeyService(s.GetRequiredService<KeyRepository>(), s.GetRequiredService<UserRepository>()));
 
 var app = builder.Build();
 

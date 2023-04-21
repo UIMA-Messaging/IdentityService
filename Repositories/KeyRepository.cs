@@ -25,13 +25,13 @@ namespace IdentityService.Repository
                         o.preKey AS OneTimePreKey,
                         o.id AS one_time_pre_key_id
                     FROM
-                        Users u
-                        INNER JOIN OneTimePreKeys o ON u.id = o.user_id
+                        ""Users"" u
+                        INNER JOIN ""OneTimePreKeys"" o ON u.id = o.user_id
                     WHERE
                         u.id = @userId
                     LIMIT 1
                 )
-                DELETE FROM OneTimePreKeys
+                DELETE FROM ""OneTimePreKeys""
                 WHERE id IN (SELECT one_time_pre_key_id FROM selected_data)
                 RETURNING IdentityKey, SignedPreKey, Signature, OneTimePreKey;";
             return await connection.QueryFirstAsync<KeyBundle>(sql, new { userId });
@@ -42,7 +42,7 @@ namespace IdentityService.Repository
             using var connection = factory.GetOpenConnection();
 
             const string sql = @"
-                INSERT INTO public.Users(
+                INSERT INTO ""Users""(
 	                id, identity_key, signed_pre_key, signature, created_at, updated_at)
 	                VALUES (@userId, @identityKey, @signePreKey, @signature, CURRENT_DATE, NULL)
                 ON CONFLICT (id) DO UPDATE
@@ -55,11 +55,16 @@ namespace IdentityService.Repository
 
             await connection.ExecuteAsync(sql, new { userId, identityKey, signePreKey, signature });
 
+            //CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
             const string preKeysSql= @"
-                INSERT INTO public.OneTimePreKeys(id, user_id, pre_key, created_at)
+                INSERT INTO ""OneTimePreKeys""(id, user_id, pre_key, created_at)
 	            VALUES (uuid_generate_v4(), @userId, @preKey, CURRENT_DATE);";
 
-            oneTimePreKeys.ToList().ForEach(async preKey => await connection.ExecuteAsync(preKeysSql, new { userId, preKey }));
+            foreach(var preKey in oneTimePreKeys)
+            {
+                await connection.ExecuteAsync(preKeysSql, new { userId, preKey });
+            }
         }
     }
 }

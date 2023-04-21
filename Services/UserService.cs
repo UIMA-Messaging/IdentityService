@@ -13,9 +13,9 @@ public class UserService
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public async Task<User> GetUserById(string userId)
+    public async Task<User> GetUserByUsername(string username)
     {
-        return await repository.GetUserById(userId) ?? throw new UserNotFound();
+        return await repository.GetUserByUsername(username) ?? throw new UserNotFound();
     }
 
     public async Task<User[]> GetUsersByQuery(string query, int count, int offset)

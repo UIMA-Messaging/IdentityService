@@ -1,7 +1,6 @@
 ﻿using ContactService.Contracts;
 using IdentityService.Contracts;
 using IdentityService.Services;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityService.Controllers;
@@ -17,14 +16,14 @@ public class UserController : ControllerBase
         this.service = service ?? throw new ArgumentNullException(nameof(service));
     }
     
-    [HttpGet("id/{userId}")]
-    public async Task<User> GetUserById(string userId)
+    [HttpGet("username/{username}")]
+    public async Task<User> GetUserByUsername(string username)
     {
-        return await service.GetUserById(userId);
+        return await service.GetUserByUsername(username);
     }
 
     [HttpGet("search/{query}")]
-    public async Task<PaginatedResults> GetUserByUsername(string query, [FromQuery] int count, [FromQuery] int offset)
+    public async Task<PaginatedResults> GetUserByName(string query, [FromQuery] int count, [FromQuery] int offset)
     {
         count = count == default ? 10 : count;
 
