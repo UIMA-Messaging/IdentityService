@@ -24,7 +24,6 @@ namespace IdentityService.Repository
         public async Task<IEnumerable<User>> GetUsersByQuery(string query, int count, int offset)
         {
             await using var connection = factory.GetOpenConnection();
-            // following query needs `CREATE EXTENSION pg_trgm;` enabled
             const string sql = @"
                 SELECT *
                 FROM ""Users""
