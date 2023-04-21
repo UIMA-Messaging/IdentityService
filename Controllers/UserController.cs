@@ -1,6 +1,7 @@
 ﻿using ContactService.Contracts;
 using IdentityService.Contracts;
 using IdentityService.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityService.Controllers;
@@ -23,8 +24,10 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("search/{query}")]
-    public async Task<PaginatedResults> GetUserByUsername(string query, [FromQuery] int count = 10, [FromQuery] int offset = 0)
+    public async Task<PaginatedResults> GetUserByUsername(string query, [FromQuery] int count, [FromQuery] int offset)
     {
+        count = count == default ? 10 : count;
+
         var results = await service.GetUsersByQuery(query, count, offset);
 
         string protocol = HttpContext.Request.IsHttps ? "https" : "http";

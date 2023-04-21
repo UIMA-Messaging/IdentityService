@@ -30,6 +30,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseMiddleware<HttpExceptionMiddleware>();
+app.UseCors(options =>
+{
+    options.AllowAnyMethod()
+        .AllowAnyHeader()
+        .SetIsOriginAllowed(origin => true)
+        .AllowCredentials();
+});
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
