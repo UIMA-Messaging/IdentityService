@@ -1,4 +1,4 @@
-﻿using ContactService.Contracts;
+﻿using IdentityService.Contracts;
 using IdentityService.Contracts;
 using IdentityService.Services;
 using Microsoft.AspNetCore.Mvc;

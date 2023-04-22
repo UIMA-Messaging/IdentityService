@@ -1,5 +1,6 @@
 using IdentityService.Contracts;
 using IdentityService.Exceptions;
+using IdentityService.RabbitMQ;
 using IdentityService.Repository;
 
 namespace IdentityService.Services.Keys;
@@ -9,10 +10,11 @@ public class KeyService
     private readonly KeyRepository keyRepository;
     private readonly UserRepository userRepository;
     
-    public KeyService(KeyRepository keys, UserRepository users)
+    public KeyService(KeyRepository keys, UserRepository users, IRabbitMQListener<ExchangeKeys> keyExchangeListener)
     {
         this.keyRepository = keys ?? throw new ArgumentNullException(nameof(keys));
         this.userRepository = users ?? throw new ArgumentNullException(nameof(users));
+        keyExchangeListener.OnReceive += (_, keys) => RegisterExchangeKeys(keys);
     }
 
     public async Task<KeyBundle> GetKeyBundle(string from, string to)
