@@ -1,19 +1,20 @@
 using IdentityService.Contracts;
 using IdentityService.Exceptions;
+using IdentityService.RabbitMQ;
 using IdentityService.Repository;
-using IdentityService.Services;
 
 namespace IdentityService.Services.Keys;
 
 public class KeyService
 {
-    private readonly KeyRepository repository;
-    private readonly UserService service;
+    private readonly KeyRepository keyRepository;
+    private readonly UserRepository userRepository;
     
-    public KeyService(KeyRepository repository, UserService service)
+    public KeyService(KeyRepository keys, UserRepository users, IRabbitMQListener<ExchangeKeys> keyExchangeListener)
     {
-        this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        this.service = service ?? throw new ArgumentNullException(nameof(service));
+        this.keyRepository = keys ?? throw new ArgumentNullException(nameof(keys));
+        this.userRepository = users ?? throw new ArgumentNullException(nameof(users));
+        keyExchangeListener.OnReceive += (_, keys) => RegisterExchangeKeys(keys);
     }
 
     public async Task<KeyBundle> GetKeyBundle(string from, string to)
@@ -22,15 +23,12 @@ public class KeyService
         {
             throw new BadKeyBundleRequest();
         }
-        return await repository.GetKeyBundleAndDisposeFromUser(to);
+        return await keyRepository.GetKeyBundleAndDisposeFromUser(to);
     }
 
     public async Task RegisterExchangeKeys(ExchangeKeys keys)
     {
-        var _ = await service.GetUserById(keys.UserId) ?? throw new UserNotFound();
-        await repository.CreateOrUpdateIdentityKey(keys.UserId, keys.IdentityKey);
-        await repository.CreateOrUpdateSignedPreKey(keys.UserId, keys.SignedPreKey);
-        await repository.CreateOrUpdateSignature(keys.UserId, keys.Signature);
-        await repository.CreateOneTimePreKeys(keys.UserId, keys.OneTimePreKeys);
+        var _ = await userRepository.GetUserById(keys.UserId) ?? throw new UserNotFound();
+        await keyRepository.CreateOrUpdateKeys(keys.UserId, keys.IdentityKey, keys.SignedPreKey, keys.Signature, keys.OneTimePreKeys);
     }
 }
