@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>ContactService</RootNamespace>
+    <RootNamespace>IdentityService</RootNamespace>
     <UserSecretsId>22ed393f-6725-418d-a7cf-2a4a688f02e9</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>

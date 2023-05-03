@@ -1,7 +1,7 @@
 ﻿using Npgsql;
 using System.Data.Common;
 
-namespace IdentityService.Repository.Connection
+namespace IdentityService.Repositories.Connection
 {
     public class ConnectionFactory : IConnectionFactory
     {
