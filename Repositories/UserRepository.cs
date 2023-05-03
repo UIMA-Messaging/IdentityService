@@ -1,8 +1,8 @@
 ﻿using IdentityService.Contracts;
-using IdentityService.Repository.Connection;
+using IdentityService.Repositories.Connection;
 using Dapper;
 
-namespace IdentityService.Repository
+namespace IdentityService.Repositories
 {
     public class UserRepository
     {
@@ -13,11 +13,11 @@ namespace IdentityService.Repository
             this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
-        public async Task<User> GetUserByUsername(string username)
+        public async Task<User?> GetUserByUsername(string username)
         {
             await using var connection = factory.GetOpenConnection();
             const string sql = @"SELECT * FROM ""Users"" WHERE Username = @Username LIMIT 1";
-            var results = await connection.QueryAsync<User>(sql, new { Username = username });
+            IEnumerable<User?> results = await connection.QueryAsync<User>(sql, new { Username = username });
             return results.FirstOrDefault();
         }
 

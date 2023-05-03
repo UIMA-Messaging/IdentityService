@@ -1,8 +1,8 @@
-﻿using IdentityService.Contracts;
-using IdentityService.Repository.Connection;
-using Dapper;
+﻿using Dapper;
+using IdentityService.Contracts;
+using IdentityService.Repositories.Connection;
 
-namespace IdentityService.Repository
+namespace IdentityService.Repositories
 {
     public class KeyRepository
     {
@@ -15,7 +15,7 @@ namespace IdentityService.Repository
 
         public async Task<KeyBundle> GetKeyBundleAndDisposeFromUser(string userId)
         {
-            using var connection = factory.GetOpenConnection();
+            await using var connection = factory.GetOpenConnection();
             const string sql = @"
                 WITH selected_data AS (
                     SELECT
@@ -39,9 +39,9 @@ namespace IdentityService.Repository
 
         public async Task CreateOrUpdateKeys(string userId, string identityKey, string signePreKey, string signature, IEnumerable<string> oneTimePreKeys)
         {
-            using var connection = factory.GetOpenConnection();
+            await using var connection = factory.GetOpenConnection();
 
-            const string sql = @"
+            const string sql = $@"
                 INSERT INTO ""Users""(
 	                id, identity_key, signed_pre_key, signature, created_at, updated_at)
 	                VALUES (@userId, @identityKey, @signePreKey, @signature, CURRENT_DATE, NULL)

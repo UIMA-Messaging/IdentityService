@@ -1,6 +1,6 @@
 using IdentityService.Contracts;
 using IdentityService.Exceptions;
-using IdentityService.Repository;
+using IdentityService.Repositories;
 
 namespace IdentityService.Services;
 

@@ -1,7 +1,7 @@
 using IdentityService.Contracts;
 using IdentityService.Exceptions;
 using IdentityService.RabbitMQ;
-using IdentityService.Repository;
+using IdentityService.Repositories;
 
 namespace IdentityService.Services.Keys;
 
