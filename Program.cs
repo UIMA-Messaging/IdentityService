@@ -31,7 +31,7 @@ builder.Services.AddSingleton(s => new KeyService(s.GetRequiredService<KeyReposi
 
 var app = builder.Build();
 
-// Singleton instanciations
+// Singleton instantiations
 app.Services.GetRequiredService<KeyService>();
 
 if (app.Environment.IsDevelopment())
