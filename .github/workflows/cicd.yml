@@ -9,9 +9,9 @@ env:
   AWS_REGION: eu-west-2
   ECS_CLUSTER_NAME: uima
   ECS_SERVICE_NAME: identity-service
-  ECS_TASK_DEFINITION_NAME: uima-identity-service-deploy
+  ECS_TASK_DEFINITION_NAME: uima-identity-service-deploy:4
   ECR_REPOSITORY_NAME: uima/identity-service
-  ECR_IMAGE_TAG: 4
+  ECR_IMAGE_TAG: latest
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
 jobs:
