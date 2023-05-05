@@ -11,7 +11,7 @@ env:
   ECS_SERVICE_NAME: identity-service
   ECS_TASK_DEFINITION_NAME: uima-identity-service-deploy
   ECR_REPOSITORY_NAME: uima/identity-service
-  ECR_IMAGE_TAG: latest
+  ECR_IMAGE_TAG: 4
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
 jobs:
