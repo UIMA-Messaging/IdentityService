@@ -17,23 +17,36 @@ namespace IdentityService.Repositories
         {
             await using var connection = factory.GetOpenConnection();
             const string sql = @"
-                WITH selected_data AS (
-                    SELECT
-                        u.identity_key AS IdentityKey,
-                        u.signed_pre_key AS SignedPreKey,
-                        u.signature AS Signature,
-                        o.preKey AS OneTimePreKey,
-                        o.id AS one_time_pre_key_id
-                    FROM
-                        ""Users"" u
-                        INNER JOIN ""OneTimePreKeys"" o ON u.id = o.user_id
-                    WHERE
-                        u.id = @userId
-                    LIMIT 1
+                WITH bundle AS
+                (
+	                SELECT
+		                u.identity_key AS identitykey,
+		                u.signed_pre_key AS signedprekey,
+		                u.signature AS signature,
+		                o.pre_key AS onetimeprekey,
+		                o.id AS onetimeprekeyid
+	                FROM
+		                ""Users"" u
+		                INNER JOIN ""OneTimePreKeys"" o ON u.id = o.user_id
+	                WHERE
+		                u.id = @userId
+	                LIMIT 1
+                ),
+                deleted_keys AS
+                (
+	                DELETE FROM ""OneTimePreKeys""
+	                WHERE id IN (SELECT onetimeprekeyid FROM bundle)
+	                RETURNING id
                 )
-                DELETE FROM ""OneTimePreKeys""
-                WHERE id IN (SELECT one_time_pre_key_id FROM selected_data)
-                RETURNING IdentityKey, SignedPreKey, Signature, OneTimePreKey;";
+                SELECT 
+	                identitykey, 
+	                signedprekey, 
+	                signature, 
+	                onetimeprekey
+                FROM 
+	                bundle
+                WHERE 
+	                onetimeprekeyid IN (SELECT id FROM deleted_keys);";
             return await connection.QueryFirstAsync<KeyBundle>(sql, new { userId });
         }
 
