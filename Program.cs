@@ -22,8 +22,8 @@ builder.Services.AddSingleton(_ => new UserRepository(new ConnectionFactory(buil
 builder.Services.AddSingleton(_ => new KeyRepository(new ConnectionFactory(builder.Configuration["ConnectionStrings:Keys"])));
 
 // RabbitMQ
-var rabbitMQConnection = new RabbitMQConnection(builder.Configuration["RabbitMQ:Uri"]);
-builder.Services.AddSingleton<IRabbitMQListener<ExchangeKeys>>(_ => new RabbitMQListener<ExchangeKeys>(rabbitMQConnection, "identity.users.keys", builder.Configuration["RabbitMQ:UserRegistrations:Exchange"], builder.Configuration["RabbitMQ:UserRegistrations:RoutingKey"]));
+builder.Services.AddSingleton<IRabbitMQConnection>(_ => new RabbitMQConnection(builder.Configuration["RabbitMQ:Host"], builder.Configuration["RabbitMQ:Username"], builder.Configuration["RabbitMQ:Password"]));
+builder.Services.AddSingleton<IRabbitMQListener<ExchangeKeys>>(s => new RabbitMQListener<ExchangeKeys>(s.GetRequiredService<IRabbitMQConnection>(), "identity.users.keys", builder.Configuration["RabbitMQ:UserRegistrations:Exchange"], builder.Configuration["RabbitMQ:UserRegistrations:RoutingKey"]));
 
 // Services
 builder.Services.AddTransient(s => new UserService(s.GetRequiredService<UserRepository>()));

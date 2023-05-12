@@ -6,9 +6,21 @@ namespace IdentityService.RabbitMQ.Connection
     {
         private readonly IConnectionFactory factory;
 
-        public RabbitMQConnection(string host)
+        public RabbitMQConnection(string host, string username, string password)
         {
-            factory = new ConnectionFactory() { HostName = host };
+            factory = host == "localhost"
+                ? new ConnectionFactory
+                {
+                    HostName = host,
+                    UserName = username,
+                    Password = password
+                }
+                : new ConnectionFactory
+                {
+                    Uri = new Uri(host),
+                    UserName = username,
+                    Password = password
+                };
         }
 
         public IConnection TryConnect()
