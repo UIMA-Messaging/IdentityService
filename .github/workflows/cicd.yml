@@ -1,19 +1,10 @@
-name: CI
+name: CI/CD Pipeline
+
 on:
   push:
     branches:
       - master
-env:
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  AWS_REGION: eu-west-2
-  ECS_CLUSTER_NAME: uima
-  ECS_SERVICE_NAME: identity-service
-  ECS_TASK_DEFINITION_NAME: uima-identity-service-deploy:4
-  ECR_REPOSITORY_NAME: uima/identity-service
-  ECR_IMAGE_TAG: latest
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  
+      
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,9 +21,10 @@ jobs:
         run: dotnet build --configuration Release --no-restore
       - name: Test
         run: dotnet test --no-restore --verbosity normal
+        
   docker:
     needs: build
-    
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -47,49 +39,22 @@ jobs:
           username: dockeroo80
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
           
-  ecr:
-    needs: build
+  deploy:
+    needs: docker
+  
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-west-2
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-    - name: Push Image to Amazon ECR
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: uima/identity-service
-      run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
-  re-run-task:
-    needs: ecr
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    runs-on: ubuntu-latest
+      - name: Generate kube configuration
+        run: |
+          mkdir ~/.kube
+          touch ~/.kube/config
+          echo "${{ secrets.AKS_CONTEXT }}" >> ~/.kube/config
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-region: ${{ env.AWS_REGION }}
-        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-    - name: Stop the running task
-      run: |
-        TASK_ARN=$(aws ecs list-tasks --cluster $ECS_CLUSTER_NAME --service-name $ECS_SERVICE_NAME --desired-status RUNNING --query 'taskArns[0]' --output text)
-        if [ ! -z "$TASK_ARN" ]; then
-          echo $TASK_ARN 
-          aws ecs stop-task --task $TASK_ARN --cluster $ECS_CLUSTER_NAME
-        fi
-    - name: Run the updated task
-      run: |
-        aws ecs update-service --cluster $ECS_CLUSTER_NAME --service $ECS_SERVICE_NAME --force-new-deployment --task-definition $ECS_TASK_DEFINITION_NAME
-        
+      - name: Deploy application
+        run: kubectl apply -f k8s/deployment.yml
+
+      - name: Restart pod
+        run: kubectl rollout restart deploy identity-app
