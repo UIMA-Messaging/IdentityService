@@ -77,9 +77,15 @@ namespace IdentityService.Services.Keys.Tests
             var to = GetUser();
             var bundle = GetKeyBundle();
 
-            mockUserRepository.Setup(mock => mock.GetUserById(to.Id)).ReturnsAsync(to);
-            mockUserRepository.Setup(mock => mock.GetUserById(from.Id)).ReturnsAsync(from);
-            mockKeyRepository.Setup(mock => mock.GetKeyBundleAndDisposeFromUser(to.Id)).ReturnsAsync(bundle);
+            mockUserRepository
+                .Setup(mock => mock.GetUserById(to.Id))
+                .ReturnsAsync(to);
+            mockUserRepository
+                .Setup(mock => mock.GetUserById(from.Id))
+                .ReturnsAsync(from);
+            mockKeyRepository
+                .Setup(mock => mock.GetKeyBundleAndDisposeFromUser(to.Id))
+                .ReturnsAsync(bundle);
 
             var results = await keyService.GetKeyBundle(from.Id, to.Id);
 
@@ -92,8 +98,12 @@ namespace IdentityService.Services.Keys.Tests
             var from = GetUser();
             var to = GetUser();
 
-            mockUserRepository.Setup(mock => mock.GetUserById(from.Id)).ReturnsAsync((User)default);
-            mockUserRepository.Setup(mock => mock.GetUserById(to.Id)).ReturnsAsync(to);
+            mockUserRepository
+                .Setup(mock => mock.GetUserById(from.Id))
+                .ReturnsAsync((User)default);
+            mockUserRepository
+                .Setup(mock => mock.GetUserById(to.Id))
+                .ReturnsAsync(to);
 
             var action = () => keyService.GetKeyBundle(from.Id, to.Id);
 
@@ -106,8 +116,12 @@ namespace IdentityService.Services.Keys.Tests
             var from = GetUser();
             var to = GetUser();
 
-            mockUserRepository.Setup(mock => mock.GetUserById(from.Id)).ReturnsAsync(from);
-            mockUserRepository.Setup(mock => mock.GetUserById(to.Id)).ReturnsAsync((User)default);
+            mockUserRepository
+                .Setup(mock => mock.GetUserById(from.Id))
+                .ReturnsAsync(from);
+            mockUserRepository
+                .Setup(mock => mock.GetUserById(to.Id))
+                .ReturnsAsync((User)default);
 
             var action = () => keyService.GetKeyBundle(from.Id, to.Id);
 
@@ -120,7 +134,9 @@ namespace IdentityService.Services.Keys.Tests
             var keys = GetExchangeKeys();
             var user = GetUser();
 
-            mockUserRepository.Setup(mock => mock.GetUserById(keys.UserId)).ReturnsAsync(user);
+            mockUserRepository
+                .Setup(mock => mock.GetUserById(keys.UserId))
+                .ReturnsAsync(user);
 
             await keyService.RegisterExchangeKeys(keys);
 
@@ -133,7 +149,9 @@ namespace IdentityService.Services.Keys.Tests
             var user = GetUser();
             var keys = GetExchangeKeys();
 
-            mockUserRepository.Setup(mock => mock.GetUserById(keys.UserId)).ReturnsAsync((User)default);
+            mockUserRepository
+                .Setup(mock => mock.GetUserById(keys.UserId))
+                .ReturnsAsync((User)default);
 
             var action = () => keyService.RegisterExchangeKeys(keys);
 
