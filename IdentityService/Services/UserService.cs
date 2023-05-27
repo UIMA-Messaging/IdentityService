@@ -1,14 +1,14 @@
 using IdentityService.Contracts;
 using IdentityService.Exceptions;
-using IdentityService.Repositories;
+using IdentityService.Repositories.Users;
 
 namespace IdentityService.Services;
 
 public class UserService
 {
-    private readonly UserRepository repository;
+    private readonly IUserRepository repository;
 
-    public UserService(UserRepository repository)
+    public UserService(IUserRepository repository)
     {
         this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }

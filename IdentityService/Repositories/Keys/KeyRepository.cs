@@ -2,9 +2,9 @@
 using IdentityService.Contracts;
 using IdentityService.Repositories.Connection;
 
-namespace IdentityService.Repositories
+namespace IdentityService.Repositories.Keys
 {
-    public class KeyRepository
+    public class KeyRepository : IKeyRepository
     {
         private readonly IConnectionFactory factory;
 
@@ -70,11 +70,11 @@ namespace IdentityService.Repositories
 
             //CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-            const string preKeysSql= @"
+            const string preKeysSql = @"
                 INSERT INTO ""OneTimePreKeys""(id, user_id, pre_key, created_at)
 	            VALUES (uuid_generate_v4(), @userId, @preKey, CURRENT_DATE);";
 
-            foreach(var preKey in oneTimePreKeys)
+            foreach (var preKey in oneTimePreKeys)
             {
                 await connection.ExecuteAsync(preKeysSql, new { userId, preKey });
             }

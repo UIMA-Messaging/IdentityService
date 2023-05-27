@@ -1,16 +1,20 @@
 using IdentityService.Contracts;
 using IdentityService.Exceptions;
 using IdentityService.RabbitMQ;
-using IdentityService.Repositories;
+using IdentityService.Repositories.Keys;
+using IdentityService.Repositories.Users;
 
 namespace IdentityService.Services.Keys;
 
 public class KeyService
 {
-    private readonly KeyRepository keyRepository;
-    private readonly UserRepository userRepository;
+    private readonly IKeyRepository keyRepository;
+    private readonly IUserRepository userRepository;
     
-    public KeyService(KeyRepository keys, UserRepository users, IRabbitMQListener<ExchangeKeys> keyExchangeListener)
+    public KeyService(
+        IKeyRepository keys, 
+        IUserRepository users, 
+        IRabbitMQListener<ExchangeKeys> keyExchangeListener)
     {
         this.keyRepository = keys ?? throw new ArgumentNullException(nameof(keys));
         this.userRepository = users ?? throw new ArgumentNullException(nameof(users));

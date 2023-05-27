@@ -2,9 +2,9 @@
 using IdentityService.Repositories.Connection;
 using Dapper;
 
-namespace IdentityService.Repositories
+namespace IdentityService.Repositories.Users
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly IConnectionFactory factory;
 
@@ -13,7 +13,7 @@ namespace IdentityService.Repositories
             this.factory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
-        public async Task<User?> GetUserByUsername(string username)
+        public async Task<User> GetUserByUsername(string username)
         {
             await using var connection = factory.GetOpenConnection();
             const string sql = @"SELECT * FROM ""Users"" WHERE Username = @Username LIMIT 1";
@@ -39,7 +39,7 @@ namespace IdentityService.Repositories
 	                OR SIMILARITY(DisplayName, @Query) > 0.2 
                 ORDER BY (SIMILARITY(DisplayName, @Query), 
                     SIMILARITY(Username, @Query)) DESC
-                LIMIT @Count OFFSET @Offset"; 
+                LIMIT @Count OFFSET @Offset";
             return await connection.QueryAsync<User>(sql, new { Query = query, Count = count, Offset = offset });
         }
     }
