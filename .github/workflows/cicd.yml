@@ -35,7 +35,7 @@ jobs:
           image: dockeroo80/uima-identity-service
           tags: latest
           registry: docker.io
-          dockerfile: Dockerfile
+          dockerfile: IdentityService/Dockerfile
           username: dockeroo80
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
           
