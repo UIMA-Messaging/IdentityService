@@ -16,8 +16,8 @@ public class KeyService
         IUserRepository users, 
         IRabbitMQListener<ExchangeKeys> keyExchangeListener)
     {
-        this.keyRepository = keys ?? throw new ArgumentNullException(nameof(keys));
-        this.userRepository = users ?? throw new ArgumentNullException(nameof(users));
+        keyRepository = keys ?? throw new ArgumentNullException(nameof(keys));
+        userRepository = users ?? throw new ArgumentNullException(nameof(users));
         keyExchangeListener.OnReceive += (_, keys) => RegisterExchangeKeys(keys);
     }
 
@@ -27,12 +27,14 @@ public class KeyService
         {
             throw new BadKeyBundleRequest();
         }
+        _ = await userRepository.GetUserById(from) ?? throw new UserNotFound();
+        _ = await userRepository.GetUserById(to) ?? throw new UserNotFound();
         return await keyRepository.GetKeyBundleAndDisposeFromUser(to);
     }
 
     public async Task RegisterExchangeKeys(ExchangeKeys keys)
     {
-        var _ = await userRepository.GetUserById(keys.UserId) ?? throw new UserNotFound();
+        _ = await userRepository.GetUserById(keys.UserId) ?? throw new UserNotFound();
         await keyRepository.CreateOrUpdateKeys(keys.UserId, keys.IdentityKey, keys.SignedPreKey, keys.Signature, keys.OneTimePreKeys);
     }
 }
