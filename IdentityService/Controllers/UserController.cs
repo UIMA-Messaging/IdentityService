@@ -23,7 +23,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("search/{query}")]
-    public async Task<PaginatedResults> GetUserByName(string query, [FromQuery] int count, [FromQuery] int offset)
+    public async Task<PaginatedResults<User>> GetUserByName(string query, [FromQuery] int count, [FromQuery] int offset)
     {
         count = count == default ? 10 : count;
 
@@ -33,7 +33,7 @@ public class UserController : ControllerBase
         string host = HttpContext.Request.Host.Value;
         string baseUrl = $@"{protocol}://{host}/users/search/{query}";
 
-        return new PaginatedResults
+        return new PaginatedResults<User>
         {
             NextPage = results.Length < count ? null : @$"{baseUrl}?count={count}&offset={offset + count}",
             PreviousPage = offset - count < 0 ? null : @$"{baseUrl}?count={count}&offset={offset - count}",
