@@ -31,7 +31,7 @@ public class UserController : ControllerBase
 
         string protocol = HttpContext.Request.IsHttps ? "https" : "http";
         string host = HttpContext.Request.Host.Value;
-        string baseUrl = $@"{protocol}://{host}/users/search/{query}";
+        string baseUrl = $@"{protocol}://{host}/api/identity/users/search/{query}";
 
         return new PaginatedResults<User>
         {
