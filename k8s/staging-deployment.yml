@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: identity-app
+spec:
+  selector:
+    matchLabels:
+      app: identity-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: identity-app
+    spec:
+      containers:
+        - name: identity-service
+          image: dockeroo80/uima-identity-service:staging
+          ports:
+            - containerPort: 80
+          env:
+            - name: ConnectionStrings__Users
+              valueFrom:
+                secretKeyRef:
+                  name: identity-service-secrets
+                  key: users-connection-strings
+            - name: ConnectionStrings__Keys
+              valueFrom:
+                secretKeyRef:
+                  name: identity-service-secrets
+                  key: keys-connection-strings
+            - name: Bugsnag__ApiKey
+              valueFrom:
+                secretKeyRef:
+                  name: identity-service-secrets
+                  key: bugsnag-api-key
+            - name: RabbitMQ__Host
+              valueFrom:
+                configMapKeyRef:
+                  name: identity-service-configs
+                  key: rabbitmq-host
+            - name: RabbitMQ__Username
+              valueFrom:
+                secretKeyRef:
+                  name: identity-service-secrets
+                  key: rabbitmq-username
+            - name: RabbitMQ__Password
+              valueFrom:
+                secretKeyRef:
+                  name: identity-service-secrets
+                  key: rabbitmq-password
+            - name: RabbitMQ__UserRegistrations__Exchange
+              valueFrom:
+                configMapKeyRef:
+                  name: identity-service-configs
+                  key: rabbitmq-user-registrations-exchange
+            - name: RabbitMQ__UserRegistrations__RoutingKey
+              valueFrom:
+                configMapKeyRef:
+                  name: identity-service-configs
+                  key: rabbitmq-user-registrations-routing-key
