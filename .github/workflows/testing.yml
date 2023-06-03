@@ -1,0 +1,19 @@
+name: UIMA Regression Tests
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  uima_regression_tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run UIMA Regression Tests
+        uses: UIMA-Messaging/uima-test-suite@master
+        with:
+          input1: hello
+          input2: world
