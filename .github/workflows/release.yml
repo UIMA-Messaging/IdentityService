@@ -21,7 +21,18 @@ jobs:
         run: dotnet build --configuration Release --no-restore
       - name: Test
         run: dotnet test --no-restore --verbosity normal
-        
+
+  regression-tests:
+    needs: build
+
+    runs-on: ubuntu-latest
+    steps:
+        - name: Run Cucumber Regression
+          uses: UIMA-Messaging/uima-test-suite@master
+          with:
+            repo: https://github.com/UIMA-Messaging/uima-test-suite.git
+            branch: master
+  
   docker:
     needs: build
 
@@ -38,7 +49,7 @@ jobs:
           dockerfile: IdentityService/Dockerfile
           username: dockeroo80
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-          
+            
   deploy:
     needs: docker
   
