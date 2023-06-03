@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: Run Cucumber Regression
-          uses: UIMA-Messaging/uima-test-suite@master
+          uses: greffgreff/run-java-tests-action@1.0
           with:
             repo: https://github.com/UIMA-Messaging/uima-test-suite.git
             branch: master
