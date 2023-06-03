@@ -34,7 +34,7 @@ jobs:
             branch: master
   
   docker:
-    needs: build
+    needs: regression-tests
 
     runs-on: ubuntu-latest
     steps:
