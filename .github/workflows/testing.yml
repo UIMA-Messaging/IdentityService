@@ -15,5 +15,5 @@ jobs:
       - name: Run UIMA Regression Tests
         uses: UIMA-Messaging/uima-test-suite@master
         with:
-          input1: hello
-          input2: world
+          repo: https://github.com/UIMA-Messaging/uima-test-suite.git
+          branch: master
