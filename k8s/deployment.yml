@@ -58,3 +58,5 @@ spec:
                 configMapKeyRef:
                   name: identity-service-configs
                   key: rabbitmq-user-registrations-routing-key
+                  
+                  
