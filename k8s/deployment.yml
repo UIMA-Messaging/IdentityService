@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: identity-service
-          image: dockeroo80/uima-identity-service
+          image: dockeroo80/uima-identity-service:IMAGE_SERVICE
           ports:
             - containerPort: 80
           env:
