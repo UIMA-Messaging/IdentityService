@@ -4,7 +4,7 @@ The identity service is responsible for handling anything between-user interacti
 
 > More information regarding the Signal Protocol exchange keys can be found [here](https://signal.org/docs/specifications/x3dh/#publishing-keys).
 
-This service is part of the greater UIMA project communicated between an API gateway by desktop clients and has a direct connection to an event bus. This service  has its own database for storing keys and user data:
+This service is part of the greater UIMA project that communicates between an API gateway by desktop clients and has a direct connection to an event bus. This service  has its own database for storing keys and user data:
 
 ![Individual  UIMA C4 Model](https://github.com/UIMA-Messaging/identity-service/assets/56337726/29aba09b-839a-4ab4-bbc2-6b5a0c8adf9d)
 
