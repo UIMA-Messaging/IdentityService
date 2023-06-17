@@ -1,8 +1,8 @@
 # Identity Service
 
-The identity service is responsible for handling anything between-user interactions, including the searching of users and establishing a first contact by providing various public encryption keys as per the Signal Procotol.
+The identity service is responsible for handling anything between-user interactions, including the searching of users and establishing a first contact by providing various public encryption keys as per the Signal Protocol.
 
-> More information regarding the Signal Procotol exchange keys can be found [here](https://signal.org/docs/specifications/x3dh/#publishing-keys).
+> More information regarding the Signal Protocol exchange keys can be found [here](https://signal.org/docs/specifications/x3dh/#publishing-keys).
 
 This service is part of the greater UIMA project communicated between an API gateway by desktop clients and has a direct connection to an event bus. This service  has its own database for storing keys and user data:
 
@@ -39,7 +39,9 @@ You can configure environment variable in appsettings.json file in the project. 
 
 ## Endpoints
 
-The identity service has two controllers: one for handling the searching of users, and another, for the handling of exchange keys.
+The Identity Service has two controllers: one for handling the searching of users, and another, for the handling of exchange keys.
+
+> ⚠ Aside from fetching paginated user results, all requests must have a valid access token
 
 `GET users/username/{username}`
 
@@ -84,11 +86,27 @@ Response body:
 }
 ```
 
-`POST keys/register/exchanges`
+`POST keys/bundle/{from}/{to}`
 
-This endpoint is responsible for storing public encryption keys (or exchange keys) to a database for later retrival by other users.
+This endpoint allows a user, `to` to fetch a bundle of various keys to establish encryption with another user, `from`, as per the Signal Protocol.
 
-Request body:
+Response body:
+```json
+{
+  "identityKey": "string",
+  "oneTimePreKey": "string",
+  "signedPreKey": "string",
+  "signature": "string"
+}
+```
+
+## Event bus subscriptions
+
+Routing key `users.new.keys`
+
+This subscription is responsible for handling and storing public encryption keys (or exchange keys) to a database for later retrival by other users.
+
+Message body:
 ```json
 {
   "userId": "string",
@@ -102,7 +120,3 @@ Request body:
   "signature": "string"
 }
 ```
-
-
-
-
