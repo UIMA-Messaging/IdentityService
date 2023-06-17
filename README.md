@@ -120,3 +120,5 @@ Message body:
   "signature": "string"
 }
 ```
+
+> Please see the Registration Service for more information regarding the event bus messages [here](https://github.com/UIMA-Messaging/registration-service)
