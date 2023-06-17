@@ -45,7 +45,7 @@ The identity service has two controllers: one for handling the searching of user
 
 This endpoint returns one user given a `username`. If there are no exect match found, a 404 response is returned.
 
-Return body:
+Response body:
 ```json
 {
   "id": "string",
@@ -66,7 +66,7 @@ This endpoint returns a paginated list of users given a `query` fuzzy search. Th
 | `count` int         | Number of results to be returned, max 100, default 10.                |     false    |
 | `offset` int        | 0 indexed page number, default 0                  |     false    |
 
-Return body:
+Response body:
 ```json
 {
   "previousPage": "string",
@@ -84,7 +84,24 @@ Return body:
 }
 ```
 
+`POST keys/register/exchanges`
 
+This endpoint is responsible for storing public encryption keys (or exchange keys) to a database for later retrival by other users.
+
+Request body:
+```json
+{
+  "userId": "string",
+  "identityKey": "f53BeDB12BcF69c12abcB5f6a711cBF90d727d0AeA8b5aa1d925E08b608f7EDbC42AdeeE6Bae6C6d73F0aaeCb6f",
+  "signedPreKey": "BdaBE160Ff86311d9FAFCEFd27Cb6DD61d5dDCc1DBf1cAcaE0d0158C857de71ce26dBCBbcaeC2FABC8B4f",
+  "oneTimePreKeys": [
+    "string",
+    ...
+    "string"
+  ],
+  "signature": "string"
+}
+```
 
 
 
